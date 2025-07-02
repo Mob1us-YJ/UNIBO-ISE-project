@@ -545,7 +545,7 @@ class DroneSimulationApp : Application() {
                 maxDepthSpinner.valueFactory.value = 15
             }
             "Multiple Packages" -> {
-                initialStateField.text = "[at_drone(drone1,warehouse1), energy(drone1,100), at_package(pkg1,warehouse1), at_package(pkg2,warehouse1)]"
+                initialStateField.text = "[at_drone(drone1,warehouse1), energy(drone1,100), at_drone(drone2,warehouse2), energy(drone2,120), at_package(pkg1,warehouse1), at_package(pkg2,warehouse2)]"
                 goalStateField.text = "[at_package(pkg1,houseA), at_package(pkg2,houseB)]"
                 maxDepthSpinner.valueFactory.value = 25
             }

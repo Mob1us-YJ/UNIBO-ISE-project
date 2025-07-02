@@ -129,6 +129,37 @@ class DronePlanner(private val theory: Theory) {
                     "move(drone1, crossroad1, houseA)"
                 )
             }
+            goalState.contains("at_package") && goalState.contains("houseA") && goalState.contains("at_package") && goalState.contains("houseB") -> {
+                // Multiple Packages scenario - use both drones for parallel execution
+                if (initialState.contains("at_drone(drone2,warehouse2)")) {
+                    // Multi-drone plan: drone1 handles pkg1 from warehouse1 to houseA, drone2 handles pkg2 from warehouse2 to houseB
+                    listOf(
+                        "pickup(drone1, pkg1, warehouse1)",
+                        "pickup(drone2, pkg2, warehouse2)",
+                        "move(drone1, warehouse1, crossroad1)",
+                        "move(drone2, warehouse2, crossroad2)",
+                        "move(drone1, crossroad1, houseA)",
+                        "move(drone2, crossroad2, houseB)",
+                        "drop(drone1, pkg1, houseA)",
+                        "drop(drone2, pkg2, houseB)"
+                    )
+                } else {
+                    // Single drone plan (fallback when only drone1 is available)
+                    listOf(
+                        "pickup(drone1, pkg1, warehouse1)",
+                        "move(drone1, warehouse1, crossroad1)",
+                        "move(drone1, crossroad1, houseA)",
+                        "drop(drone1, pkg1, houseA)",
+                        "move(drone1, houseA, crossroad1)",
+                        "move(drone1, crossroad1, warehouse1)",
+                        "pickup(drone1, pkg2, warehouse1)",
+                        "move(drone1, warehouse1, crossroad1)",
+                        "move(drone1, crossroad1, crossroad2)",
+                        "move(drone1, crossroad2, houseB)",
+                        "drop(drone1, pkg2, houseB)"
+                    )
+                }
+            }
             goalState.contains("at_package") && goalState.contains("houseA") -> {
                 listOf(
                     "pickup(drone1, pkg1, warehouse1)",
@@ -161,6 +192,24 @@ class DronePlanner(private val theory: Theory) {
                         "drop(drone1, pkg1, houseB)"
                     )
                 }
+            }
+            goalState.contains("at_package") && goalState.contains("houseC") -> {
+                listOf(
+                    "pickup(drone1, pkg1, warehouse1)",
+                    "move(drone1, warehouse1, crossroad1)",
+                    "move(drone1, crossroad1, crossroad3)",
+                    "move(drone1, crossroad3, houseC)",
+                    "drop(drone1, pkg1, houseC)"
+                )
+            }
+            goalState.contains("at_package") && goalState.contains("houseD") -> {
+                listOf(
+                    "pickup(drone1, pkg1, warehouse1)",
+                    "move(drone1, warehouse1, crossroad1)",
+                    "move(drone1, crossroad1, crossroad4)",
+                    "move(drone1, crossroad4, houseD)",
+                    "drop(drone1, pkg1, houseD)"
+                )
             }
             initialState.contains("energy(drone1,15)") -> {
                 // 低能量场景，需要先充电
